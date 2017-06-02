@@ -66,6 +66,7 @@ OMX_ERRORTYPE Port::connect(Port * other) {
 
 OMX_ERRORTYPE Port::disconnect() {
 	_peer = nullptr;
+    return OMX_ErrorNone;
 }
 
 // buffers
@@ -117,6 +118,7 @@ OMX_ERRORTYPE Port::process_buffer(Buffer & buffer) {
 		case OMX_DirOutput:
 			error = OMX_FillThisBuffer(_component->handle(), buffer.header());
 			break;
+        default: break;
 	}
 	if (error != OMX_ErrorNone) {
 		ERROR << "[" << _component->name() << "]: Failed to process buffer: "

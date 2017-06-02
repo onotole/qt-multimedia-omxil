@@ -1,6 +1,7 @@
 #ifndef __MEDIA_OMX_CORE_H__
 #define __MEDIA_OMX_CORE_H__
 
+#define OMX_SKIP64BIT
 #include <OMX_Component.h>
 #ifdef OMX_RPI
 #include <OMX_Broadcom.h>

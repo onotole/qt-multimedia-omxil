@@ -1,14 +1,12 @@
 #include "media_player_control.h"
 
-MediaPlayerControl::MediaPlayerControl(QObject * parent) : QMediaPlayerControl(parent) {
-    qInfo("MediaPlayerControl::ctor");
+MediaPlayerControl::MediaPlayerControl(QObject * parent) : QMediaPlayerControl(parent) {}
+
+MediaPlayerControl::~MediaPlayerControl() {}
+
+QMediaPlayer::State MediaPlayerControl::state() const {
+    return QMediaPlayer::StoppedState;
 }
-
- MediaPlayerControl::~MediaPlayerControl() {}
-
- QMediaPlayer::State MediaPlayerControl::state() const {
-     return QMediaPlayer::StoppedState;
- }
 
 QMediaPlayer::MediaStatus MediaPlayerControl::mediaStatus() const {
     return QMediaPlayer::UnknownMediaStatus;
@@ -74,12 +72,12 @@ const QIODevice * MediaPlayerControl::mediaStream() const {
     return nullptr;
 }
 
-void MediaPlayerControl::setMedia(const QMediaContent & media, QIODevice * stream) {
-    qInfo("MediaPlayerControl::setMedia...");
+void MediaPlayerControl::setMedia(const QMediaContent & media, QIODevice *) {
+    _player.load(media.canonicalUrl().url().toUtf8().constData());
 }
 
 void MediaPlayerControl::play() {
-    qInfo("MediaPlayerControl::play...");
+    _player.play();
 }
 
 void MediaPlayerControl::pause() {

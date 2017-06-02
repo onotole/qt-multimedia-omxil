@@ -29,7 +29,7 @@ Component::Component(const std::string & name)
 
 	static const OMX_INDEXTYPE domains[] {
 		OMX_IndexParamAudioInit,
-		OMX_IndexParamVideoInit,
+        OMX_IndexParamVideoInit,
 		OMX_IndexParamImageInit,
 		OMX_IndexParamOtherInit
 	};
@@ -183,6 +183,7 @@ void Component::set_fill_buffer_handler(buffer_callback_t && callback) {
 }
 
 OMX_ERRORTYPE Component::on_event(OMX_EVENTTYPE event, OMX_U32 d1, OMX_U32 d2, OMX_PTR data) {
+    DEBUG << "[" << _name << "]: On Event: " << event;
 	std::string misc_info;
 	switch (event) {
 		case OMX_EventError:
@@ -204,11 +205,6 @@ OMX_ERRORTYPE Component::on_event(OMX_EVENTTYPE event, OMX_U32 d1, OMX_U32 d2, O
 			break;
 	}
 
-	if (event == OMX_EventError) {
-		ERROR << "[" << _name << "]: Processing error: " << error_to_string(OMX_ERRORTYPE(d1));
-	} else {
-
-	}
 	// Notify waiter on state chage
 	if (event == OMX_EventCmdComplete && d1 == OMX_CommandStateSet) {
 		_wait_cv.notify_one();

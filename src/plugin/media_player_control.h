@@ -2,6 +2,7 @@
 #define __MEDIA_PLAYER_CONTROL_H__
 
 #include <QMediaPlayerControl>
+#include "../player/player.h"
 
 class MediaPlayerControl : public QMediaPlayerControl {
     Q_OBJECT
@@ -33,6 +34,7 @@ public:
     void stop() override;
 
 private:
+    Player _player;
 };
 
 #endif // __MEDIA_PLAYER_CONTROL_H__
