@@ -24,6 +24,7 @@ size_t av_to_omx_framerate(AVRational fr) {
 
 #ifndef OMX_BUFFERFLAG_TIME_UNKNOWN
 #define OMX_BUFFERFLAG_TIME_UNKNOWN 0
+#define OMX_BUFFERFLAG_TIME_IS_DTS 0
 #endif
 
 FileSrc::FileSrc(const std::string & file) {
@@ -42,6 +43,7 @@ FileSrc::FileSrc(const std::string & file) {
 }
 
 bool FileSrc::read(omx::Buffer & buffer) {
+    static const uint64_t TIME_SCALE = 1000000;
     // do we have to read new packet ?
     if (_current_frame.size == 0) {
         while (true) {
@@ -52,10 +54,24 @@ bool FileSrc::read(omx::Buffer & buffer) {
     uint32_t todo = std::min((uint32_t)buffer.header()->nAllocLen, _current_frame.size - _current_frame.read_pos);
     memcpy((char*)buffer.data(), _current_frame.data + _current_frame.read_pos, todo);
     buffer.header()->nFilledLen = todo;
+    int64_t pts = _current_frame.pts;
+    // PTS is broken use DTS
+    if (pts == AV_NOPTS_VALUE) {
+        // Has valid DTS
+        if (_current_frame.dts != AV_NOPTS_VALUE) {
+            pts = _current_frame.dts;
+            buffer.header()->nFlags |= OMX_BUFFERFLAG_TIME_IS_DTS;
+        } else {
+            pts = 0;
+            buffer.header()->nFlags |= OMX_BUFFERFLAG_TIME_UNKNOWN;
+        }
+    }
+    pts = (TIME_SCALE * pts * _context->streams[0]->time_base.num) / _context->streams[0]->time_base.den;
+    buffer.header()->nTimeStamp = ToOMXTime(pts);
     if (!_startime_set){
         buffer.header()->nFlags |= OMX_BUFFERFLAG_STARTTIME;
+        _startime_set = true;
     }
-    buffer.header()->nFlags |= OMX_BUFFERFLAG_TIME_UNKNOWN;
     _current_frame.read_pos += todo;
     if (_current_frame.done()) {
         _current_frame.reset();

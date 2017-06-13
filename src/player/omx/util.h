@@ -5,6 +5,24 @@
 #define OMX_SKIP64BIT
 #include <OMX_Core.h>
 
+#ifdef OMX_SKIP64BIT
+static inline OMX_TICKS ToOMXTime(int64_t pts)
+{
+  OMX_TICKS ticks;
+  ticks.nLowPart = pts;
+  ticks.nHighPart = pts >> 32;
+  return ticks;
+}
+static inline int64_t FromOMXTime(OMX_TICKS ticks)
+{
+  int64_t pts = ticks.nLowPart | ((uint64_t)(ticks.nHighPart) << 32);
+  return pts;
+}
+#else
+#define FromOMXTime(x) (x)
+#define ToOMXTime(x) (x)
+#endif
+
 struct LogRecord {
     LogRecord(std::ostream & stream) : _stream(stream) {}
     ~LogRecord() { _stream << std::endl; }

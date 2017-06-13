@@ -6,6 +6,7 @@
 void debug_buffer_feed(omx::Buffer & buffer) {
     DEBUG << "feeding " << buffer.header()->nFilledLen
           << " bytes, flags = " << buffer.header()->nFlags
+          << ", pts = " << FromOMXTime(buffer.header()->nTimeStamp)
           << ", data: " << std::hex << int(((char*)buffer.data())[0])
           << " " << int(((char*)buffer.data())[1])
           << " " << int(((char*)buffer.data())[2])
@@ -59,8 +60,6 @@ ESSink::ESSink(const Source::stream_config_t & config) : _decoder("OMX.broadcom.
 omx::Buffer & ESSink::get_buffer() {
     return _decoder.input()->get_buffer();
 }
-
-void feed(omx::Buffer & buffer);
 
 void ESSink::feed(omx::Buffer & buffer) {
     debug_buffer_feed(buffer);
