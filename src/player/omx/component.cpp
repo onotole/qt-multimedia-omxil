@@ -183,7 +183,6 @@ void Component::set_fill_buffer_handler(buffer_callback_t && callback) {
 }
 
 OMX_ERRORTYPE Component::on_event(OMX_EVENTTYPE event, OMX_U32 d1, OMX_U32 d2, OMX_PTR data) {
-    DEBUG << "[" << _name << "]: On Event: " << event;
 	std::string misc_info;
 	switch (event) {
 		case OMX_EventError:

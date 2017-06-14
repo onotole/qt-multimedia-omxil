@@ -14,7 +14,17 @@ int main(int argc, char *argv[]) {
 
     Player player;
     player.load(argv[1]);
-    player.play();
+
+    while(true) {
+       std::string command;
+       std::cin >> command;
+       if ("play" == command)
+           player.play();
+       else if ("pause" == command)
+           player.pause();
+       else if ("exit" == command)
+           break;
+    }
 
     return 0;
 }

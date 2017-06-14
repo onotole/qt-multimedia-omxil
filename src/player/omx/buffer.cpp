@@ -140,7 +140,7 @@ OMX_U32 Buffers::next_unlocked_buffer() {
 				return next;
 		next = (next + 1) % _buffers.size();
 	} while (next != _next_index);
-	DEBUG << "buffer underrun detected";
+    TRACE << "buffer underrun detected";
 	return _buffers.size();
 }
 
