@@ -8,8 +8,12 @@
 class ESSink {
 public:
     ESSink(const Source::stream_config_t & config);
+
     omx::Buffer & get_buffer();
     void feed(omx::Buffer & buffer);
+
+    void play();
+    void pause();
 
 private:
     struct OMXInit {

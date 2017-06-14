@@ -31,6 +31,7 @@ struct header : S {
 struct OMX_PortParam : header<OMX_PORT_PARAM_TYPE> {};
 struct OMX_ParamPortDefinition : header<OMX_PARAM_PORTDEFINITIONTYPE> {};
 struct OMX_TimeConfigClockState : header<OMX_TIME_CONFIG_CLOCKSTATETYPE> {};
+struct OMX_TimeConfigScale : header<OMX_TIME_CONFIG_SCALETYPE> {};
 struct OMX_BufferHeader : header<OMX_BUFFERHEADERTYPE> {};
 struct OMX_VideoParamPortFormat : header<OMX_VIDEO_PARAM_PORTFORMATTYPE> {};
 struct OMX_VideoParamBitrate : header<OMX_VIDEO_PARAM_BITRATETYPE> {};

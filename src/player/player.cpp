@@ -9,6 +9,7 @@ Player::~Player() {
 }
 
 void Player::load(const std::string & uri) {
+    DEBUG << "player::load: " << uri;
     unload();
     _src.reset(Source::create(uri));
     _sink.reset(new ESSink(_src->stream_config()));
@@ -25,6 +26,7 @@ void Player::load(const std::string & uri) {
 }
 
 void Player::unload() {
+    DEBUG << "payer::unload.";
     {
         std::unique_lock<std::mutex> _(_lock);
         _src.reset();
@@ -35,7 +37,11 @@ void Player::unload() {
 }
 
 void Player::play() {
+    DEBUG << "player::play.";
+    if (_sink) _sink->play();
 }
 
 void Player::pause() {
+    DEBUG << "player::pause.";
+    if (_sink) _sink->pause();
 }

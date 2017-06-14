@@ -4,7 +4,7 @@
 #include <unistd.h>
 
 void debug_buffer_feed(omx::Buffer & buffer) {
-    DEBUG << "feeding " << buffer.header()->nFilledLen
+    TRACE << "feeding " << buffer.header()->nFilledLen
           << " bytes, flags = " << buffer.header()->nFlags
           << ", pts = " << FromOMXTime(buffer.header()->nTimeStamp)
           << ", data: " << std::hex << int(((char*)buffer.data())[0])
@@ -55,6 +55,7 @@ ESSink::ESSink(const Source::stream_config_t & config) : _decoder("OMX.broadcom.
         debug_buffer_feed(buffer);
         _decoder.input()->process_buffer(buffer);
     }
+    pause();
 }
 
 omx::Buffer & ESSink::get_buffer() {
@@ -64,4 +65,17 @@ omx::Buffer & ESSink::get_buffer() {
 void ESSink::feed(omx::Buffer & buffer) {
     debug_buffer_feed(buffer);
     _decoder.input()->process_buffer(buffer);
+}
+
+
+void ESSink::play() {
+    omx::OMX_TimeConfigScale scale;
+    scale.xScale = (1 << 16);
+    _clock.set_config(OMX_IndexConfigTimeScale, &scale);
+}
+
+void ESSink::pause() {
+    omx::OMX_TimeConfigScale scale;
+    scale.xScale = 0;
+    _clock.set_config(OMX_IndexConfigTimeScale, &scale);
 }
