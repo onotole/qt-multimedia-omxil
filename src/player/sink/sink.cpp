@@ -33,7 +33,7 @@ ESSink::ESSink(const Source::stream_config_t & config) : _decoder("OMX.broadcom.
         _scheduler.set_state(OMX_StateExecuting);
         _scheduler.output()->connect(_renderer.input());
         _renderer.set_state(OMX_StateExecuting);
-
+         pause();
         return OMX_ErrorNone;
     });
 
@@ -55,7 +55,6 @@ ESSink::ESSink(const Source::stream_config_t & config) : _decoder("OMX.broadcom.
         debug_buffer_feed(buffer);
         _decoder.input()->process_buffer(buffer);
     }
-    pause();
 }
 
 omx::Buffer & ESSink::get_buffer() {
