@@ -17,6 +17,7 @@ QRect VideoWindowControl::displayRect() const {
 }
 
 void VideoWindowControl::setDisplayRect(const QRect &rect) {
+    qInfo("VideoWindowControl setDisplayRect...");
 }
 
 bool VideoWindowControl::isFullScreen() const {
@@ -24,7 +25,7 @@ bool VideoWindowControl::isFullScreen() const {
 }
 
 void VideoWindowControl::setFullScreen(bool fullScreen) {
-
+    qInfo("VideoWindowControl setFullscreen...");
 }
 
 void VideoWindowControl::repaint() {
@@ -40,7 +41,7 @@ Qt::AspectRatioMode VideoWindowControl::aspectRatioMode() const {
 }
 
 void VideoWindowControl::setAspectRatioMode(Qt::AspectRatioMode mode) {
-
+    qInfo("VideoWindowControl setAspectRatioMode...");
 }
 
 int VideoWindowControl::brightness() const {

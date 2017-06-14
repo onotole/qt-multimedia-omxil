@@ -36,6 +36,7 @@ struct OMX_BufferHeader : header<OMX_BUFFERHEADERTYPE> {};
 struct OMX_VideoParamPortFormat : header<OMX_VIDEO_PARAM_PORTFORMATTYPE> {};
 struct OMX_VideoParamBitrate : header<OMX_VIDEO_PARAM_BITRATETYPE> {};
 #ifdef OMX_RPI
+struct OMX_ConfigDisplayRegion : header<OMX_CONFIG_DISPLAYREGIONTYPE> {};
 struct OMX_ConfigPortBoolean : header<OMX_CONFIG_PORTBOOLEANTYPE> {};
 struct OMX_ConfigBrcmPortStats : header<OMX_CONFIG_BRCMPORTSTATSTYPE> {};
 #endif

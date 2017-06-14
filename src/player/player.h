@@ -14,8 +14,10 @@ public:
 
     void load(const std::string & uri);
     void unload();
+
     void play();
     void pause();
+    PlaybackState get_playback_state() const;
 
 private:
     std::thread _data_thread;

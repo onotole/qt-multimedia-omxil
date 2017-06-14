@@ -77,11 +77,13 @@ void MediaPlayerControl::setMedia(const QMediaContent & media, QIODevice *) {
 }
 
 void MediaPlayerControl::play() {
+    qInfo("MediaPlayerControl::play...");
     _player.play();
 }
 
 void MediaPlayerControl::pause() {
     qInfo("MediaPlayerControl::pause...");
+   _player.pause();
 }
 
 void MediaPlayerControl::stop() {

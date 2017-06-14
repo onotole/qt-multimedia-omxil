@@ -26,7 +26,7 @@ void Player::load(const std::string & uri) {
 }
 
 void Player::unload() {
-    DEBUG << "payer::unload.";
+    DEBUG << "player::unload.";
     {
         std::unique_lock<std::mutex> _(_lock);
         _src.reset();
@@ -44,4 +44,9 @@ void Player::play() {
 void Player::pause() {
     DEBUG << "player::pause.";
     if (_sink) _sink->pause();
+}
+
+PlaybackState Player::get_playback_state() const {
+    if (_sink) return _sink->get_playback_state();
+    return PlaybackState::STOPPED;
 }

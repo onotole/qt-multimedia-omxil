@@ -5,6 +5,8 @@
 #include "../omx/util.h"
 #include "../src/src.h"
 
+enum class PlaybackState { STOPPED, PAUSED, PLAYING };
+
 class ESSink {
 public:
     ESSink(const Source::stream_config_t & config);
@@ -14,6 +16,7 @@ public:
 
     void play();
     void pause();
+    PlaybackState get_playback_state() const { return _state; }
 
 private:
     struct OMXInit {
@@ -33,6 +36,7 @@ private:
     omx::Component _renderer;
 
     bool _start_set = false;
+    PlaybackState _state = PlaybackState::STOPPED;
 };
 
 #endif // __SINK_H__

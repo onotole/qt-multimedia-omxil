@@ -33,7 +33,16 @@ ESSink::ESSink(const Source::stream_config_t & config) : _decoder("OMX.broadcom.
         _scheduler.set_state(OMX_StateExecuting);
         _scheduler.output()->connect(_renderer.input());
         _renderer.set_state(OMX_StateExecuting);
-         pause();
+#ifdef OMX_RPI
+        omx::OMX_ConfigDisplayRegion display_config;
+        display_config.nPortIndex = _renderer.input()->index();
+        display_config.set = OMX_DISPLAY_SET_LAYER;
+        display_config.layer = 1;
+        _renderer.set_config(OMX_IndexConfigDisplayRegion, &display_config);
+#endif
+        if (_state != PlaybackState::PLAYING)
+            pause();
+
         return OMX_ErrorNone;
     });
 
@@ -66,15 +75,16 @@ void ESSink::feed(omx::Buffer & buffer) {
     _decoder.input()->process_buffer(buffer);
 }
 
-
 void ESSink::play() {
     omx::OMX_TimeConfigScale scale;
     scale.xScale = (1 << 16);
     _clock.set_config(OMX_IndexConfigTimeScale, &scale);
+    _state = PlaybackState::PLAYING;
 }
 
 void ESSink::pause() {
     omx::OMX_TimeConfigScale scale;
     scale.xScale = 0;
     _clock.set_config(OMX_IndexConfigTimeScale, &scale);
+    _state = PlaybackState::PAUSED;
 }
