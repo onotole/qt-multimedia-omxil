@@ -34,7 +34,13 @@ FileSrc::FileSrc(const std::string & file) {
     avformat_find_stream_info(_context, nullptr);
     av_dump_format(_context, 0, file.c_str(), 0);
     // TODO: select apropriate stream
-    AVCodecContext * codec_context = _context->streams[0]->codec;
+    for (size_t idx = 0; idx < _context->nb_streams; ++idx) {
+        if (_context->streams[idx]->codec->codec_type == AVMEDIA_TYPE_VIDEO) {
+            _video_idx = idx;
+            break;
+        }
+    }
+    AVCodecContext * codec_context = _context->streams[_video_idx]->codec;
     _stream_config.extra_data.assign(codec_context->extradata, codec_context->extradata + codec_context->extradata_size);
     _stream_config.video_encoding = av_to_omx_codec(codec_context->codec_id);
     _stream_config.framerate = av_to_omx_framerate(codec_context->framerate);
@@ -47,7 +53,7 @@ bool FileSrc::read(omx::Buffer & buffer) {
     // do we have to read new packet ?
     if (_current_frame.size == 0) {
         while (true) {
-            if (!av_read_frame(_context, &_current_frame) && _current_frame.stream_index == 0) break;
+            if (!av_read_frame(_context, &_current_frame) && (size_t)_current_frame.stream_index == _video_idx) break;
             _current_frame.reset();
         }
     }
@@ -66,7 +72,7 @@ bool FileSrc::read(omx::Buffer & buffer) {
             buffer.header()->nFlags |= OMX_BUFFERFLAG_TIME_UNKNOWN;
         }
     }
-    pts = (TIME_SCALE * pts * _context->streams[0]->time_base.num) / _context->streams[0]->time_base.den;
+    pts = (TIME_SCALE * pts * _context->streams[_video_idx]->time_base.num) / _context->streams[_video_idx]->time_base.den;
     buffer.header()->nTimeStamp = ToOMXTime(pts);
     if (!_startime_set){
         buffer.header()->nFlags |= OMX_BUFFERFLAG_STARTTIME;

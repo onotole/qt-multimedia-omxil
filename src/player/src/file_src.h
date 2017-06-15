@@ -7,7 +7,6 @@ extern "C" {
 #include <libavformat/avformat.h>
 }
 
-
 struct AVPacketWrap : AVPacket {
     AVPacketWrap() {
         av_init_packet(this);
@@ -42,6 +41,7 @@ private:
     AVFormatContext * _context = nullptr;
     stream_config_t _stream_config;
     AVPacketWrap _current_frame;
+    size_t _video_idx = -1;
     bool _startime_set = false;
 };
 
