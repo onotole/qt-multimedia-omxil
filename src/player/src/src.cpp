@@ -7,6 +7,7 @@ enum class Proto {
     UNKNOWN = 0,
     FILE,
     HTTP,
+    HTTPS,
     RTP,
     RTSP
 };
@@ -16,10 +17,11 @@ Proto parse_protocol(const std::string & uri) {
     if (pos == std::string::npos)
         throw std::runtime_error("parse error");
     auto proto = uri.substr(0, pos);
-    if (proto == "file") return Proto::FILE;
-    if (proto == "http") return Proto::HTTP;
-    if (proto == "rtp")  return Proto::RTP;
-    if (proto == "rtsp") return Proto::RTSP;
+    if (proto == "file" ) return Proto::FILE;
+    if (proto == "http" ) return Proto::HTTP;
+    if (proto == "https") return Proto::HTTPS;
+    if (proto == "rtp"  ) return Proto::RTP;
+    if (proto == "rtsp" ) return Proto::RTSP;
     throw std::runtime_error("parse error");
 }
 
