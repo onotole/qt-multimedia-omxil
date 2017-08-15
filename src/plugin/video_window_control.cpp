@@ -1,7 +1,9 @@
 #include "video_window_control.h"
 
-VideoWindowControl::VideoWindowControl(QObject * parent) : QVideoWindowControl(parent) {
-    qInfo("VideoWindowControl ctor...");
+int VideoWindowControl::_next_id = 1;
+
+VideoWindowControl::VideoWindowControl(QObject * parent) : QVideoWindowControl(parent), _id(_next_id++) {
+    qInfo("[%d]: VideoWindowControl ctor...", _id);
 }
 
 WId VideoWindowControl::winId() const {
@@ -9,15 +11,20 @@ WId VideoWindowControl::winId() const {
 }
 
 void VideoWindowControl::setWinId(WId id) {
-    qInfo("VideoWindowControl set win id...");
+    qInfo("[%d]: VideoWindowControl set win id...", _id);
 }
 
 QRect VideoWindowControl::displayRect() const {
     return QRect();
 }
 
-void VideoWindowControl::setDisplayRect(const QRect &rect) {
-    qInfo("VideoWindowControl setDisplayRect...");
+void VideoWindowControl::setDisplayRect(const QRect & rc) {
+    if (_player) {
+        qInfo("[%d]: VideoWindowControl setDisplayRect...", _id);
+        _player->set_output_rect({rc.x(), rc.y(), rc.width(), rc.height()});
+    } else {
+        qWarning("[%d]: Misfiring VideoWindowControl setDisplayRect: no player assigned!", _id);
+    }
 }
 
 bool VideoWindowControl::isFullScreen() const {
@@ -41,7 +48,7 @@ Qt::AspectRatioMode VideoWindowControl::aspectRatioMode() const {
 }
 
 void VideoWindowControl::setAspectRatioMode(Qt::AspectRatioMode mode) {
-    qInfo("VideoWindowControl setAspectRatioMode...");
+    qInfo("[%d]: VideoWindowControl setAspectRatioMode...", _id);
 }
 
 int VideoWindowControl::brightness() const {

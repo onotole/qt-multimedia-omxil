@@ -9,6 +9,8 @@
 
 class Player {
 public:
+    typedef ESSink::rect_t rect_t;
+
     Player();
     ~Player();
 
@@ -18,6 +20,10 @@ public:
     void play();
     void pause();
     PlaybackState get_playback_state() const;
+
+    void set_output_rect(const rect_t & rect) {
+        if (_sink) _sink->set_output_rect(rect);
+    }
 
 private:
     std::thread _data_thread;

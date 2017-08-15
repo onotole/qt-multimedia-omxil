@@ -10,6 +10,8 @@ public:
     explicit MediaPlayerControl(QObject * parent = nullptr);
     ~MediaPlayerControl();
 
+    Player * player() { return &_player; }
+
     QMediaPlayer::State state() const override;
     QMediaPlayer::MediaStatus mediaStatus() const override;
     qint64 duration() const override;
@@ -34,6 +36,8 @@ public:
     void stop() override;
 
 private:
+    static int _next_id;
+    int _id;
     Player _player;
 };
 

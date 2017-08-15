@@ -2,11 +2,17 @@
 #define __VIDEO_WINDOW_CONTROL_H__
 
 #include <QVideoWindowControl>
+#include "../player/player.h"
 
 class VideoWindowControl : public QVideoWindowControl {
     Q_OBJECT
 public:
     explicit VideoWindowControl(QObject * parent = nullptr);
+
+    void setPlayer(Player * player) {
+        qInfo("[%d]: setPlayer = %p", _id, player);
+        _player = player;
+    }
 
     WId winId() const override;
     void setWinId(WId id) override;
@@ -26,6 +32,11 @@ public:
     void setHue(int hue) override;
     int saturation() const override;
     void setSaturation(int saturation) override;
+
+private:
+    static int _next_id;
+    int _id;
+    Player * _player;
 };
 
 #endif // __VIDEO_WINDOW_CONTROL_H__

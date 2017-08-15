@@ -1,6 +1,8 @@
 #include "media_player_control.h"
 
-MediaPlayerControl::MediaPlayerControl(QObject * parent) : QMediaPlayerControl(parent) {}
+int MediaPlayerControl::_next_id = 1;
+
+MediaPlayerControl::MediaPlayerControl(QObject * parent) : QMediaPlayerControl(parent), _id(_next_id++) {}
 
 MediaPlayerControl::~MediaPlayerControl() {}
 
@@ -77,15 +79,15 @@ void MediaPlayerControl::setMedia(const QMediaContent & media, QIODevice *) {
 }
 
 void MediaPlayerControl::play() {
-    qInfo("MediaPlayerControl::play...");
+    qInfo("[%d]: MediaPlayerControl::play...", _id);
     _player.play();
 }
 
 void MediaPlayerControl::pause() {
-    qInfo("MediaPlayerControl::pause...");
+    qInfo("[%d]: MediaPlayerControl::pause...", _id);
    _player.pause();
 }
 
 void MediaPlayerControl::stop() {
-    qInfo("MediaPlayerControl::stop...");
+    qInfo("[%d]: MediaPlayerControl::stop...", _id);
 }
