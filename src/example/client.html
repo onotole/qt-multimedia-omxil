@@ -1,0 +1,26 @@
+<!DOCCTYPE html>
+<html>
+    <head>
+        <style>
+            #overlay {
+                position: absolute;
+                left: 4px;
+                top: 64px;
+                width: 1920px;
+                height: 1080px;
+                border-style: solid;
+                border-color: red;
+                border-width: 5px;
+            }
+        </style>
+        <script src="client.js"></script>
+    </head>
+    <body onload="init()">
+        <h1 align="center">External App Processor Demo</h1>
+        <video id="hdmi">
+            <source src="ext://hdm1:1" type="service/webos-external">
+        </video>
+        <div id="overlay">
+        </div>
+    </body>
+</html>

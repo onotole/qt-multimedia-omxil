@@ -27,7 +27,17 @@ function load() {
     init_video(i++);
 }
 
+function update() {
+    var req = new XMLHttpRequest();
+    req.open("GET", "http://localhost/update", true);
+    req.send();
+}
+
 function click() {
-    if (i < v.length)
+    if (i < v.length) {
         init_video(i++);
+    } else {
+        update();
+        ++i
+    }
 }
